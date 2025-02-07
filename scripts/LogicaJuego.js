@@ -25,37 +25,72 @@ function updatePlayerMovement() {
   function updateEnemies() {
     if (!boss) {
       enemies.forEach(enemy => {
-        if (enemy.type === "normal" || enemy.type === "shooter") {
-          enemy.y += enemy.speed;
-          if (enemy.type === "shooter") {
+        switch (enemy.type) {
+          case "normal":
+            enemy.y += enemy.speed;
+            break;
+        
+          case "shooter":
+            enemy.y += enemy.speed;
             enemy.shootTimer--;
             if (enemy.shootTimer <= 0) {
               enemyBullets.push({ x: enemy.x + enemy.width/2 - 5, y: enemy.y + enemy.height, width: 10, height: 20 });
-              enemy.shootTimer = Math.floor(Math.random()*100)+50;
+              enemy.shootTimer = Math.floor(Math.random() * 100) + 50;
             }
-          }
-        } else if (enemy.type === "dive" || enemy.type === "kamikaze") {
-          enemy.y += enemy.speed;
-          enemy.x += Math.sin(enemy.y/20) * 4;
+            break;
+        
+          case "dive":
+            enemy.y += enemy.speed;
+            enemy.x += Math.sin(enemy.y / 20) * 4;
+            break;
+        
+          // ELIMINA ESTE BLOQUE
+          // case "kamikaze":
+          //   let angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+          //   enemy.vx = Math.cos(angle) * enemy.speed;
+          //   enemy.vy = Math.sin(angle) * enemy.speed;
+          //   enemy.x += enemy.vx;
+          //   enemy.y += enemy.vy;
+          //   break;
+        
+          case "zigzag":
+            enemy.y += enemy.speed;
+            enemy.x += Math.sin(enemy.y / 30) * 6;
+            break;
         }
       });
+  
+      // Filtrar enemigos fuera de la pantalla
       enemies = enemies.filter(enemy => enemy.y < canvas.height);
+  
+      // Generar nuevos enemigos con mayor variedad
       if (Math.random() < 0.05) {
         let rand = Math.random();
-        let type = (rand < 0.45) ? "normal" : ((rand < 0.75) ? "shooter" : "dive");
-        let health = (type === "normal" || type === "dive") ? 1 : 2;
-        let speed = (type === "dive") ? 5 : (Math.random()*2 + 4);
-        let shootTimer = (type === "shooter") ? Math.floor(Math.random()*100)+50 : 0;
-        enemies.push({ 
-          x: Math.random()*(canvas.width - 40), 
-          y: 0, width: 40, height: 40, 
-          health, type, speed, shootTimer,
-          angle: 0, pulseTime: 0,
-          color: (type==="dive") ? "#00FFAA" : "#FF6600"
+        let enemyTypes = ["normal", "shooter", "dive", "zigzag"];
+        let type = enemyTypes[Math.floor(rand * enemyTypes.length)];
+        let health = type === "shooter" ? 2 : 1;
+        let speed = type === "dive" ? 5 : (Math.random() * 2 + 4);
+        let shootTimer = type === "shooter" ? Math.floor(Math.random() * 100) + 50 : 0;
+  
+        enemies.push({
+          x: Math.random() * (canvas.width - 40),
+          y: 0,
+          width: 40,
+          height: 40,
+          health,
+          type,
+          speed,
+          shootTimer,
+          angle: 0,
+          pulseTime: 0,
+          vx: 0,
+          vy: 0,
+          color: type === "dive" ? "#00FFAA" : "#FF6600"
         });
       }
     }
   }
+  
   
   function updateBullets() {
     bullets.forEach(bullet => {
@@ -83,14 +118,31 @@ function updatePlayerMovement() {
   function updateBoss() {
     if (boss) {
       boss.patternTime += 0.05;
+  
+      // Movimiento más complejo del jefe
       let amplitudeX = 50 + bossLevel * 10;
       let amplitudeY = 30 + bossLevel * 5;
-      boss.x = boss.startX + amplitudeX * Math.sin(boss.patternTime);
-      boss.y = boss.startY + amplitudeY * Math.cos(boss.patternTime);
+      let waveFactor = Math.sin(boss.patternTime) * Math.cos(boss.patternTime * 2);
+  
+      boss.x = boss.startX + amplitudeX * waveFactor;
+      boss.y = boss.startY + amplitudeY * Math.sin(boss.patternTime * 2);
+  
+      // Ataques en ráfagas
       boss.shootTimer--;
       if (boss.shootTimer <= 0) {
-        enemyBullets.push({ x: boss.x + boss.width/2 - 5, y: boss.y + boss.height, width: 10, height: 20 });
-        boss.shootTimer = Math.floor(Math.random()*100)+50;
+        let angleIncrement = Math.PI / 4; // Disparos en 8 direcciones
+        for (let i = 0; i < 8; i++) {
+          let angle = i * angleIncrement;
+          enemyBullets.push({
+            x: boss.x + boss.width / 2 - 5,
+            y: boss.y + boss.height,
+            width: 10,
+            height: 20,
+            vx: Math.cos(angle) * 4,
+            vy: Math.sin(angle) * 4
+          });
+        }
+        boss.shootTimer = Math.floor(Math.random() * 100) + 50;
       }
     }
   }
