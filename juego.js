@@ -1,4 +1,8 @@
 
+    
+    /********************
+     * VARIABLES GLOBALES
+     ********************/
     /********************
      * VARIABLES GLOBALES
      ********************/
@@ -30,12 +34,16 @@
     // Para controles suaves (aceleración)
     const keys = {};
     
+    // NUEVO: Variables para sistema de disparo cargado
+    let chargeShotLevel = 0, MAX_CHARGE = 100; 
+    
     /********************
      * AUDIO (Necesitas archivos de sonido)
      ********************/
-    const shootSound = new Audio('shoot.mp3');       // sonido de disparo
-    const explosionSound = new Audio('explosion.mp3'); // sonido de explosión
-    const bgMusic = new Audio('bgmusic.mp3');          // música de fondo
+    const shootSound = new Audio('shoot.mp3');
+    const explosionSound = new Audio('explosion.mp3');
+    const chargeSound = new Audio('charge.mp3'); // NUEVO: sonido de carga
+    const bgMusic = new Audio('bgmusic.mp3');
     bgMusic.loop = true;
     bgMusic.volume = 0.3;
     
@@ -64,7 +72,7 @@
     const btnDown = document.getElementById("btnDown");
     const btnFire = document.getElementById("btnFire");
     const btnBomb = document.getElementById("btnBomb");
-    
+    const comboBar = document.getElementById("comboBar"); // NUEVO: Barra de combo
     /********************
      * FONDO CON PARALLAX (dos capas)
      ********************/
@@ -125,27 +133,59 @@
      ********************/
     let explosions = [];
     function spawnExplosion(x, y) {
-      explosions.push({ x, y, radius: 0, maxRadius: 30, alpha: 1 });
-      // Aumenta el efecto de sacudida
+      // NUEVO: Sistema de partículas en explosiones
+      explosions.push({
+        x, y, 
+        radius: 0, 
+        maxRadius: 30, 
+        alpha: 1,
+        particles: Array(20).fill().map(() => ({
+          angle: Math.random() * Math.PI * 2,
+          speed: Math.random() * 5 + 2,
+          life: 1
+        }))
+      });
       shake = 10;
       explosionSound.currentTime = 0;
       explosionSound.play();
     }
+    
     function updateExplosions() {
       for (let i = explosions.length - 1; i >= 0; i--) {
-        explosions[i].radius += 1.5;
-        explosions[i].alpha -= 0.02;
-        if (explosions[i].alpha <= 0) { explosions.splice(i, 1); }
+        const exp = explosions[i];
+        exp.radius += 1.5;
+        exp.alpha -= 0.02;
+        
+        // NUEVO: Actualizar partículas
+        exp.particles.forEach(p => {
+          p.life -= 0.03;
+          p.x = exp.x + Math.cos(p.angle) * p.speed * (1 - p.life);
+          p.y = exp.y + Math.sin(p.angle) * p.speed * (1 - p.life);
+        });
+        
+        if (exp.alpha <= 0) explosions.splice(i, 1);
       }
     }
+    
     function drawExplosions() {
       explosions.forEach(exp => {
+        // Explosión principal
         ctx.save();
         ctx.globalAlpha = exp.alpha;
         ctx.fillStyle = "orange";
         ctx.beginPath();
         ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
         ctx.fill();
+        
+        // NUEVO: Dibujar partículas
+        exp.particles.forEach(p => {
+          if (p.life > 0) {
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(255, ${Math.random()*100 + 155}, 0, ${p.life})`;
+            ctx.arc(p.x, p.y, 2 * p.life, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
         ctx.restore();
       });
     }
