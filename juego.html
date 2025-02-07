@@ -190,6 +190,7 @@
   </div>
   
   <script>
+    
     /********************
      * VARIABLES GLOBALES
      ********************/
@@ -929,7 +930,25 @@
       ctx.restore();
       requestAnimationFrame(updateGame);
     }
-    
+    // Agregar al inicio de variables globales
+let randomEvents = {
+    meteorShower: false,
+    enemySwarm: false,
+    timeWarp: false
+  };
+  
+  // Función para activar eventos aleatorios
+  function activateRandomEvent() {
+    if (Math.random() < 0.008 && !boss) { // 0.8% de chance por frame
+      const events = Object.keys(randomEvents);
+      const selectedEvent = events[Math.floor(Math.random() * events.length)];
+      randomEvents[selectedEvent] = true;
+      setTimeout(() => { randomEvents[selectedEvent] = false; }, 5000); // Dura 5 segundos
+    }
+  }
+  
+  // En updateGame(), después de updateStars():
+  activateRandomEvent();
     /********************
      * INICIAR JUEGO
      ********************/
