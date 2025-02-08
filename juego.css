@@ -1,110 +1,179 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #0a0a23, #1c1c47); /* Azul oscuro con un toque de profundidad */
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
 
-    /* Estilos generales y de pantallas */
-    body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-      user-select: none;
-    }
-    .screen {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.85);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .screen h1 { margin-bottom: 20px; }
-    .screen button {
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      background: #555;
-      color: #fff;
-      cursor: pointer;
-    }
-    .screen button:hover { background: #666; }
-    .upgradeOption {
-      padding: 10px;
-      margin: 5px;
-      border: 2px solid #555;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 220px;
-    }
-    .upgradeOption:hover { border-color: #fff; }
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95); /* Fondo más oscuro */
+  color: #ccc; /* Texto menos brillante */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
 
-    /* Contenedor del juego: HUD y canvas */
-    #gameContainer {
-      display: none;
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: #000;
-      z-index: 10;
-      display: flex;
-    }
-    /* Panel lateral del HUD */
-    #scoreBoard {
-      width: 220px;
-      background: #222;
-      color: #fff;
-      padding: 20px;
-      box-sizing: border-box;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    #scoreBoard h2 { margin-top: 0; }
-    #scoreBoard button {
-      padding: 8px 12px;
-      font-size: 14px;
-      border: none;
-      border-radius: 4px;
-      background-color: #555;
-      color: #fff;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    #scoreBoard button:hover { background-color: #666; }
-    /* Contenedor y canvas de juego */
-    #canvasContainer {
-      flex-grow: 1;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    canvas {
-      background: transparent;
-      border: 4px solid #555;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    }
-    /* Controles móviles (solo se muestran en pantallas táctiles) */
-    #mobileControls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 30;
-      display: none;
-    }
-    #mobileControls button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 14px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-    }
-    #mobileControls button:active { background: rgba(255,255,255,0.4); }
+.screen h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff00de, 0 0 40px #ff00de;
+}
+
+.screen button {
+  padding: 12px 24px;
+  margin: 5px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #ff7e5f, #feb47b); /* Botones con gradiente */
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.screen button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(to right, #feb47b, #ff7e5f);
+}
+
+.upgradeOption {
+  padding: 15px;
+  margin: 10px;
+  border: 2px solid #ff7e5f;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 250px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.upgradeOption:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Contenedor del juego */
+#gameContainer {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, #000428, #004e92);
+  z-index: 10;
+  display: flex;
+}
+
+/* Panel lateral del scoreboard */
+#scoreBoard {
+  width: 250px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 2px solid #ff7e5f;
+}
+
+#scoreBoard h2 {
+  margin-top: 0;
+  font-size: 24px;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff00de;
+}
+
+#scoreBoard p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+#scoreBoard button {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+#scoreBoard button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(to right, #feb47b, #ff7e5f);
+}
+
+/* Contenedor y canvas del juego */
+#canvasContainer {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  background: transparent;
+  border: 4px solid #ff7e5f;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 0, 221, 0.5);
+}
+
+/* Barra de combo */
+#comboBar {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 20;
+}
+
+#comboBar div {
+  height: 100%;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  width: 0%;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Controles móviles */
+#mobileControls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: none;
+}
+
+#mobileControls button {
+  padding: 15px;
+  margin: 5px;
+  font-size: 16px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transition: background 0.2s ease-in-out;
+}
+
+#mobileControls button:active {
+  background: rgba(255, 255, 255, 0.4);
+}

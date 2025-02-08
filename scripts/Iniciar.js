@@ -44,9 +44,11 @@ function drawStars() {
   });
   ctx.fillStyle = "#fff";
   starsFront.forEach(star => {
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-    ctx.fill();
+    if (Math.random() < 0.95) { // Parpadeo aleatorio
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
   });
   ctx.restore();
 }

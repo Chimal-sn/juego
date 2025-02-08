@@ -34,7 +34,7 @@ function updateGame() {
         drawAnimatedEnemy(enemy);
       });
     }
-    
+    updateScoreBoard();
     updateBullets();
     updateEnemyBullets();
     updatePowerUps();

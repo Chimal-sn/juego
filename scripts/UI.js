@@ -54,3 +54,33 @@ function showNarrative(level) {
     let url = "https://twitter.com/intent/tweet?text=" + tweetText;
     window.open(url, "_blank");
   }
+
+  function updateScoreBoard() {
+    const scoreBoard = document.getElementById("stats");
+  
+    // Construir el contenido del scoreboard
+    let powerStatus = [];
+    if (powerShootActive) powerStatus.push("Disparo (" + Math.ceil(powerShootTimer / 60) + "s)");
+    if (powerShieldActive) powerStatus.push("Escudo (" + Math.ceil(powerShieldTimer / 60) + "s)");
+    if (powerSpeedActive) powerStatus.push("Velocidad (" + Math.ceil(powerSpeedTimer / 60) + "s)");
+    if (powerMultishotActive) powerStatus.push("Multishot (" + Math.ceil(powerMultishotTimer / 60) + "s)");
+    if (powerBombActive) powerStatus.push("Bomba (" + Math.ceil(powerBombTimer / 60) + "s)");
+    if (powerSlowActive) powerStatus.push("SlowMo (" + Math.ceil(powerSlowTimer / 60) + "s)");
+  
+    let bossStatus = boss
+      ? "Lv " + bossLevel + " (" + boss.health + ")"
+      : bossCooldownTimer > 0
+      ? "En espera"
+      : "Ninguno";
+  
+    // Actualizar el contenido del scoreboard
+    scoreBoard.innerHTML = `
+      <p><strong>Score:</strong> ${Math.floor(score)}</p>
+      <p><strong>Vidas:</strong> ${player.lives}</p>
+      <p><strong>Combo:</strong> x${comboMultiplier.toFixed(1)}</p>
+      <p><strong>Poderes:</strong> ${powerStatus.length ? powerStatus.join(", ") : "Ninguno"}</p>
+      <p><strong>Boss:</strong> ${bossStatus}</p>
+      <p><strong>Mejor Score:</strong> ${localStorage.getItem("highscore") || 0}</p>
+    `;
+  }
+  
