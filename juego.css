@@ -153,14 +153,14 @@ canvas {
   transition: width 0.3s ease-in-out;
 }
 
-/* Controles móviles */
+/* En juego.css */
 #mobileControls {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+  display: none; /* Ocultar por defecto en escritorio */
   z-index: 30;
-  display: none;
 }
 
 #mobileControls button {
@@ -176,4 +176,10 @@ canvas {
 
 #mobileControls button:active {
   background: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  #mobileControls {
+    display: block; /* Mostrar en dispositivos móviles */
+  }
 }
