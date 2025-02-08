@@ -24,53 +24,21 @@ function updatePlayerMovement() {
   
   function updateEnemies() {
     if (!boss) {
-      enemies.forEach(enemy => {
-        switch (enemy.type) {
-          case "normal":
-            enemy.y += enemy.speed;
-            break;
-        
-          case "shooter":
-            enemy.y += enemy.speed;
-            enemy.shootTimer--;
-            if (enemy.shootTimer <= 0) {
-              enemyBullets.push({ x: enemy.x + enemy.width/2 - 5, y: enemy.y + enemy.height, width: 10, height: 20 });
-              enemy.shootTimer = Math.floor(Math.random() * 100) + 50;
-            }
-            break;
-        
-          case "dive":
-            enemy.y += enemy.speed;
-            enemy.x += Math.sin(enemy.y / 20) * 4;
-            break;
-        
-          // ELIMINA ESTE BLOQUE
-          // case "kamikaze":
-          //   let angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
-          //   enemy.vx = Math.cos(angle) * enemy.speed;
-          //   enemy.vy = Math.sin(angle) * enemy.speed;
-          //   enemy.x += enemy.vx;
-          //   enemy.y += enemy.vy;
-          //   break;
-        
-          case "zigzag":
-            enemy.y += enemy.speed;
-            enemy.x += Math.sin(enemy.y / 30) * 6;
-            break;
-        }
-      });
-  
       // Filtrar enemigos fuera de la pantalla
       enemies = enemies.filter(enemy => enemy.y < canvas.height);
   
-      // Generar nuevos enemigos con mayor variedad
-      if (Math.random() < 0.05) {
+      // Límite máximo de enemigos en pantalla
+      const maxEnemiesOnScreen = 5 + Math.floor(currentLevel * 1.5); // Aumenta con el nivel
+  
+      // Generar nuevos enemigos solo si no superamos el límite
+      if (Math.random() < 0.05 && enemies.length < maxEnemiesOnScreen) {
         let rand = Math.random();
-        let enemyTypes = ["normal", "shooter", "dive", "zigzag"];
+        let enemyTypes = ["normal", "shooter", "dive", "zigzag", "pursue", "teleport"];
         let type = enemyTypes[Math.floor(rand * enemyTypes.length)];
-        let health = type === "shooter" ? 2 : 1;
-        let speed = type === "dive" ? 5 : (Math.random() * 2 + 4);
+        let health = type === "shooter" || type === "pursue" ? 2 : 1;
+        let speed = type === "dive" ? 5 : (Math.random() * 2 + 4 + currentLevel * 0.5);
         let shootTimer = type === "shooter" ? Math.floor(Math.random() * 100) + 50 : 0;
+        let teleportTimer = type === "teleport" ? Math.floor(Math.random() * 200) + 100 : 0;
   
         enemies.push({
           x: Math.random() * (canvas.width - 40),
@@ -81,6 +49,7 @@ function updatePlayerMovement() {
           type,
           speed,
           shootTimer,
+          teleportTimer,
           angle: 0,
           pulseTime: 0,
           vx: 0,
@@ -88,9 +57,53 @@ function updatePlayerMovement() {
           color: type === "dive" ? "#00FFAA" : "#FF6600"
         });
       }
+  
+      // Actualizar comportamiento de los enemigos
+      enemies.forEach(enemy => {
+        switch (enemy.type) {
+          case "normal":
+            enemy.y += enemy.speed;
+            break;
+  
+          case "shooter":
+            enemy.y += enemy.speed;
+            enemy.shootTimer--;
+            if (enemy.shootTimer <= 0) {
+              enemyBullets.push({ x: enemy.x + enemy.width / 2 - 5, y: enemy.y + enemy.height, width: 10, height: 20 });
+              enemy.shootTimer = Math.floor(Math.random() * 100) + 50;
+            }
+            break;
+  
+          case "dive":
+            enemy.y += enemy.speed;
+            enemy.x += Math.sin(enemy.y / 20) * 4;
+            break;
+  
+          case "zigzag":
+            enemy.y += enemy.speed;
+            enemy.x += Math.sin(enemy.y / 30) * 6;
+            break;
+  
+          case "pursue":
+            let angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+            enemy.vx = Math.cos(angle) * enemy.speed * 0.5;
+            enemy.vy = Math.sin(angle) * enemy.speed * 0.5;
+            enemy.x += enemy.vx;
+            enemy.y += enemy.vy;
+            break;
+  
+          case "teleport":
+            enemy.teleportTimer--;
+            if (enemy.teleportTimer <= 0) {
+              enemy.x = Math.random() * (canvas.width - enemy.width);
+              enemy.y = Math.random() * (canvas.height / 2);
+              enemy.teleportTimer = Math.floor(Math.random() * 200) + 100;
+            }
+            break;
+        }
+      });
     }
   }
-  
   
   function updateBullets() {
     bullets.forEach(bullet => {
@@ -123,7 +136,6 @@ function updatePlayerMovement() {
       let amplitudeX = 50 + bossLevel * 10;
       let amplitudeY = 30 + bossLevel * 5;
       let waveFactor = Math.sin(boss.patternTime) * Math.cos(boss.patternTime * 2);
-  
       boss.x = boss.startX + amplitudeX * waveFactor;
       boss.y = boss.startY + amplitudeY * Math.sin(boss.patternTime * 2);
   
@@ -143,6 +155,31 @@ function updatePlayerMovement() {
           });
         }
         boss.shootTimer = Math.floor(Math.random() * 100) + 50;
+      }
+  
+      // NUEVA FASE: Cuando la salud baja del 50%, el jefe cambia su comportamiento
+      if (boss.health < boss.maxHealth * 0.5) {
+        boss.speed *= 1.5; // Aumentar la velocidad del jefe
+        boss.shootTimer = Math.floor(Math.random() * 50) + 30; // Disparos más frecuentes
+  
+        // Ataque especial: Invocar enemigos secundarios
+        if (Math.random() < 0.01) {
+          for (let i = 0; i < 3; i++) {
+            enemies.push({
+              x: boss.x + Math.random() * boss.width - 20,
+              y: boss.y + boss.height,
+              width: 30,
+              height: 30,
+              health: 1,
+              type: "dive",
+              speed: 5,
+              shootTimer: 0,
+              angle: 0,
+              pulseTime: 0,
+              color: "#00FFAA"
+            });
+          }
+        }
       }
     }
   }
