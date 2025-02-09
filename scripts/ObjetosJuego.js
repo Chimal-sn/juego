@@ -1,15 +1,20 @@
 // gameObjects.js
 function initGameVariables(level) {
     player = {
-      x: canvas.width/2 - 20,
-      y: canvas.height - 70,
-      width: 40,
-      height: 40,
+      x: canvas.width / 2 - 26.5, // Centrado horizontalmente
+      y: canvas.height - 80,      // Ajuste vertical
+      width: 53,                  // Ancho del sprite
+      height: 50,                 // Alto del sprite
       baseSpeed: 4 + upgradeData.speed,
-      vx: 0, vy: 0,
+      vx: 0,
+      vy: 0,
       lives: 3 + upgradeData.life,
       color: "red"
     };
+
+
+
+
     enemies = [];
     bullets = [];
     enemyBullets = [];

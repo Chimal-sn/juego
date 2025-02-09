@@ -23,6 +23,15 @@
     <button onclick="startGame()">Comenzar</button>
   </div>
   
+  <!-- Pantalla de Game Over -->
+  <div id="gameOverScreen" class="screen" style="display: none;">
+    <h1>GAME OVER</h1>
+    <p>Tu puntuación: <span id="finalScore">0</span></p>
+    <button onclick="returnToMenu()">Volver al Menú</button>
+    <button onclick="restartGame()">Reiniciar</button>
+    <button onclick="shareScore()">Compartir en Twitter</button>
+  </div>
+
   <!-- Pantalla de instrucciones -->
   <div id="instructionScreen" class="screen" style="display:none;">
     <h1>Instrucciones</h1>

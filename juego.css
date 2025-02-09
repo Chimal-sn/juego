@@ -64,6 +64,52 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* En juego.css */
+#gameOverScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 30;
+}
+
+#gameOverScreen h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+}
+
+#gameOverScreen p {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+#gameOverScreen button {
+  padding: 12px 24px;
+  margin: 5px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+#gameOverScreen button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(to right, #feb47b, #ff7e5f);
+}
+
+
 /* Contenedor del juego */
 #gameContainer {
   display: none;
