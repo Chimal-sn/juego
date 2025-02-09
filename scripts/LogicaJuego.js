@@ -1,26 +1,51 @@
-// gameLogic.js
+
+// Función para actualizar el movimiento del jugador
 function updatePlayerMovement() {
     const accel = 0.5;
     const friction = 0.9;
-    if (keys["arrowleft"] || keys["a"]) { player.vx -= accel; }
-    if (keys["arrowright"] || keys["d"]) { player.vx += accel; }
+
+    // Control de las teclas de movimiento
+    if (keys["arrowleft"] || keys["a"]) {
+        player.vx -= accel;
+        player.isMovingLeft = true; // El jugador se mueve a la izquierda
+        player.isMovingRight = false; // No se mueve a la derecha
+    }
+    if (keys["arrowright"] || keys["d"]) {
+        player.vx += accel;
+        player.isMovingRight = true; // El jugador se mueve a la derecha
+        player.isMovingLeft = false; // No se mueve a la izquierda
+    }
+
+    // Si no se presiona ninguna tecla, el jugador no se está moviendo
+    if (!keys["arrowleft"] && !keys["a"] && !keys["arrowright"] && !keys["d"]) {
+        player.isMovingLeft = false;
+        player.isMovingRight = false;
+    }
+
     if (keys["arrowup"] || keys["w"]) { player.vy -= accel; }
     if (keys["arrowdown"] || keys["s"]) { player.vy += accel; }
+
+    // Fricción y límites de velocidad
     player.vx *= friction;
     player.vy *= friction;
+
     let maxSpeed = player.baseSpeed;
     if (powerSpeedActive) maxSpeed = 8 + upgradeData.speed;
     if (player.vx > maxSpeed) player.vx = maxSpeed;
     if (player.vx < -maxSpeed) player.vx = -maxSpeed;
     if (player.vy > maxSpeed) player.vy = maxSpeed;
     if (player.vy < -maxSpeed) player.vy = -maxSpeed;
+
     player.x += player.vx;
     player.y += player.vy;
+
     if (player.x < 0) player.x = 0;
     if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
     if (player.y < 0) player.y = 0;
     if (player.y > canvas.height - player.height) player.y = canvas.height - player.height;
-  }
+}
+
+
   
   function updateEnemies() {
     if (!boss) {

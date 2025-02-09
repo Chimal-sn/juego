@@ -27,11 +27,36 @@ class Bullet {
   }
 }
 
+// Cargar las imágenes para cada dirección
 const spriteSheet = new Image();
-spriteSheet.src = "./sprites/PosicionInicial_Jugador.png";
+spriteSheet.src = "./sprites/PosicionInicial_Jugador.png"; // Imagen cuando está quieto
+
+const spriteRight = new Image();
+spriteRight.src = "./sprites/Derecha_Jugador.png"; // Imagen cuando se mueve a la derecha
+
+const spriteLeft = new Image();
+spriteLeft.src = "./sprites/izquierda_Jugador.png"; // Imagen cuando se mueve a la izquierda
+
+function drawPlayer() {
+  ctx.save();
+  ctx.translate(player.x, player.y);
+
+  // Dibuja el sprite dependiendo de la dirección
+  if (player.isMovingRight) {
+      ctx.drawImage(spriteRight, -spriteRight.width / 2, -spriteRight.height / 2);
+  } else if (player.isMovingLeft) {
+      ctx.drawImage(spriteLeft, -spriteLeft.width / 2, -spriteLeft.height / 2);
+  } else {
+      // Si no se mueve, dibuja el sprite original
+      ctx.drawImage(spriteSheet, -spriteSheet.width / 2, -spriteSheet.height / 2);
+  }
+
+  ctx.restore();
+}
 
 
 
+/*
 function drawPlayer() {
   if (!spriteSheet.complete || spriteSheet.naturalWidth === 0) {
       console.warn("El sprite aún no ha cargado, no se dibuja.");
@@ -53,7 +78,7 @@ function drawPlayer() {
 
   ctx.restore();
 }
-
+*/
 
 
 // Función para disparar balas
