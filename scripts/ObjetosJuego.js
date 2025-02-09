@@ -3,8 +3,8 @@ function initGameVariables(level) {
   player = {
     x: canvas.width / 2,        // Centrado horizontalmente
     y: canvas.height - 80,      // Ajuste vertical
-    width: 45,                  // Ancho del sprite
-    height: 45,                 // Alto del sprite
+    width: 60,                  // Ancho del sprite
+    height: 60,                 // Alto del sprite
     baseSpeed: 4 + upgradeData.speed,
     vx: 0,
     vy: 0,

@@ -44,58 +44,41 @@ function drawPlayer() {
   ctx.save();
   ctx.translate(player.x, player.y);
 
-  // Dibuja el sprite dependiendo de la dirección
+  // Dibuja el sprite dependiendo de la dirección y ajusta su tamaño
   if (player.isMovingRight) {
-      // Dibuja el sprite de la derecha, centrado en la posición del jugador
-      ctx.drawImage(spriteRight, -spriteRight.width / 2, -spriteRight.height / 2);
+      ctx.drawImage(spriteRight, -player.width / 2, -player.height / 2, player.width, player.height);
   } else if (player.isMovingLeft) {
-      // Dibuja el sprite de la izquierda, centrado en la posición del jugador
-      ctx.drawImage(spriteLeft, -spriteLeft.width / 2, -spriteLeft.height / 2);
+      ctx.drawImage(spriteLeft, -player.width / 2, -player.height / 2, player.width, player.height);
   } else {
-      // Si no se mueve, dibuja el sprite original, centrado en la posición del jugador
-      ctx.drawImage(spriteSheet, -spriteSheet.width / 2, -spriteSheet.height / 2);
+      ctx.drawImage(spriteSheet, -player.width / 2, -player.height / 2, player.width, player.height);
   }
-
-  ctx.restore();
-}
-
-
-/*
-function drawPlayer() {
-  if (!spriteSheet.complete || spriteSheet.naturalWidth === 0) {
-      console.warn("El sprite aún no ha cargado, no se dibuja.");
-      return;
-  }
-
-  ctx.save();
-  ctx.translate(player.x, player.y);
-
-  // Dibuja la imagen centrada
-  ctx.drawImage(spriteSheet, -player.width / 2, -player.height / 2, player.width, player.height);
 
   // Dibuja el escudo si está activo
   if (powerShieldActive) {
-      ctx.strokeStyle = "lime";
-      ctx.lineWidth = 4;
-      ctx.strokeRect(-player.width / 2 - 4, -player.height / 2 - 4, player.width + 8, player.height + 8);
+    ctx.strokeStyle = "lime";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(-player.width / 2 - 4, -player.height / 2 - 4, player.width + 8, player.height + 8);
   }
-
+  
   ctx.restore();
 }
-*/
+
+
+
+
 
 
 // Función para disparar balas
 function fireBullet() {
-  // Calcula la posición inicial de la bala (centrada en el jugador)
-  const bulletX = player.x + player.width / 2 - BULLET_WIDTH / 2;
-  const bulletY = player.y;
-  
+  // Calcula la posición inicial de la bala centrada en el jugador
+  const bulletX = player.x - BULLET_WIDTH / 2;  // Centra la bala en X
+  const bulletY = player.y - player.height / 2; // Sale desde la parte superior del jugador
+
   // Si se activa el multishot, dispara tres balas con ligeras diferencias en la dirección
   if (powerMultishotActive) {
     bullets.push(new Bullet(bulletX, bulletY));      // Bala central
-    bullets.push(new Bullet(bulletX, bulletY, -2));    // Bala inclinada a la izquierda
-    bullets.push(new Bullet(bulletX, bulletY, 2));     // Bala inclinada a la derecha
+    bullets.push(new Bullet(bulletX - 10, bulletY, -2)); // Bala inclinada a la izquierda
+    bullets.push(new Bullet(bulletX + 10, bulletY, 2));  // Bala inclinada a la derecha
   } else if (powerShootActive) {
     // Dispara una sola bala
     bullets.push(new Bullet(bulletX, bulletY));
@@ -105,6 +88,7 @@ function fireBullet() {
   shootSound.currentTime = 0;
   shootSound.play();
 }
+
 
 // Función para activar la bomba
 function activateBomb() {
