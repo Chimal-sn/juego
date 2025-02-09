@@ -26,7 +26,7 @@ const keys = {};
 
 let chargeShotLevel = 0, MAX_CHARGE = 100;
 
-const shootSound = new Audio('shoot.mp3');
+const shootSound = new Audio('./audio/disparo_jugador.wav');
 const explosionSound = new Audio('explosion.mp3');
 const chargeSound = new Audio('charge.mp3');
 const bgMusic = new Audio('bgmusic.mp3');

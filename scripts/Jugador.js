@@ -27,6 +27,8 @@ class Bullet {
   }
 }
 
+
+
 // Cargar las imágenes para cada dirección
 const spriteSheet = new Image();
 spriteSheet.src = "./sprites/PosicionInicial_Jugador.png"; // Imagen cuando está quieto
@@ -37,23 +39,25 @@ spriteRight.src = "./sprites/Derecha_Jugador.png"; // Imagen cuando se mueve a l
 const spriteLeft = new Image();
 spriteLeft.src = "./sprites/izquierda_Jugador.png"; // Imagen cuando se mueve a la izquierda
 
+// Función para dibujar al jugador
 function drawPlayer() {
   ctx.save();
   ctx.translate(player.x, player.y);
 
   // Dibuja el sprite dependiendo de la dirección
   if (player.isMovingRight) {
+      // Dibuja el sprite de la derecha, centrado en la posición del jugador
       ctx.drawImage(spriteRight, -spriteRight.width / 2, -spriteRight.height / 2);
   } else if (player.isMovingLeft) {
+      // Dibuja el sprite de la izquierda, centrado en la posición del jugador
       ctx.drawImage(spriteLeft, -spriteLeft.width / 2, -spriteLeft.height / 2);
   } else {
-      // Si no se mueve, dibuja el sprite original
+      // Si no se mueve, dibuja el sprite original, centrado en la posición del jugador
       ctx.drawImage(spriteSheet, -spriteSheet.width / 2, -spriteSheet.height / 2);
   }
 
   ctx.restore();
 }
-
 
 
 /*
