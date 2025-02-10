@@ -2,6 +2,15 @@
 const starCountBack = 100, starCountFront = 50;
 let starsBack = [], starsFront = [];
 
+/*
+
+function resizeCanvas() {
+  const canvas = document.getElementById("gameCanvas");
+  canvas.width = window.innerWidth * 0.5;  // 90% del ancho de la ventana
+  canvas.height = window.innerHeight * 1; // 90% del alto de la ventana
+}
+
+*/
 function initStars() {
   starsBack = [];
   starsFront = [];

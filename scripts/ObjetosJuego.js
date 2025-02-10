@@ -12,9 +12,6 @@ function initGameVariables(level) {
     color: "red"
   };
 
-
-
-
     enemies = [];
     bullets = [];
     enemyBullets = [];

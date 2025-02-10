@@ -1,7 +1,12 @@
 // Definiciones de constantes para las balas
 const BULLET_SPEED = 5;
-const BULLET_WIDTH = 10;
-const BULLET_HEIGHT = 20;
+const BULLET_WIDTH = 25;
+const BULLET_HEIGHT = 25;
+
+const spriteDisparo_jugador = new Image();
+spriteDisparo_jugador.src = "./sprites/Disparo_Jugador.png"; // Imagen cuando está quieto
+
+
 
 // Clase para las balas
 class Bullet {
@@ -22,13 +27,19 @@ class Bullet {
   
   // Dibuja la bala en el canvas
   draw(ctx) {
-    ctx.fillStyle = "white"; // Puedes ajustar el color o hacerlo dinámico
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    if (spriteDisparo_jugador.complete) { 
+      ctx.drawImage(spriteDisparo_jugador, this.x, this.y, this.width, this.height);
+    } else {
+      // Si la imagen no ha cargado aún, usar un placeholder
+      ctx.fillStyle = "red"; // Un color llamativo para debugging
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
   }
 }
 
 
-
+const spriteEscudo = new Image();
+spriteEscudo.src = "./sprites/escudo.png"; // Imagen del escudo
 // Cargar las imágenes para cada dirección
 const spriteSheet = new Image();
 spriteSheet.src = "./sprites/PosicionInicial_Jugador.png"; // Imagen cuando está quieto
@@ -55,9 +66,13 @@ function drawPlayer() {
 
   // Dibuja el escudo si está activo
   if (powerShieldActive) {
-    ctx.strokeStyle = "lime";
-    ctx.lineWidth = 4;
-    ctx.strokeRect(-player.width / 2 - 4, -player.height / 2 - 4, player.width + 8, player.height + 8);
+    if (powerShieldTimer <= 5 * 30) {
+      if (Math.floor(powerShieldTimer / 10) % 2 === 0) { // Parpadeo alternando cada 10 frames
+        ctx.drawImage(spriteEscudo, -player.width / 2, -player.height / 2, player.width, player.height);
+      }
+    } else {
+      ctx.drawImage(spriteEscudo, -player.width / 2, -player.height / 2, player.width, player.height);
+    }
   }
   
   ctx.restore();

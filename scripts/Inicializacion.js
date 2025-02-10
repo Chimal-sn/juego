@@ -9,7 +9,7 @@ function updateGame() {
   let shakeOffsetX = (shake > 0) ? Math.random() * shake - shake / 2 : 0;
   let shakeOffsetY = (shake > 0) ? Math.random() * shake - shake / 2 : 0;
   if (shake > 0) { shake -= 0.5; }
-
+  //resizeCanvas()
   ctx.save();
   ctx.translate(shakeOffsetX, shakeOffsetY);
   ctx.clearRect(-shakeOffsetX, -shakeOffsetY, canvas.width, canvas.height);
@@ -41,9 +41,13 @@ function updateGame() {
   drawPlayer();
 
   bullets.forEach(bullet => {
-    ctx.fillStyle = "blue";
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    bullet.draw(ctx);  // Aquí llamas al método draw de cada bala
   });
+  
+
+
+
+
   enemyBullets.forEach(bullet => {
     ctx.fillStyle = "purple";
     ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
