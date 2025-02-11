@@ -34,6 +34,7 @@ function initGameVariables(level) {
     bgMusic.play();
   }
   
+  
   function spawnBoss() {
     boss = {
       startX: canvas.width/2 - 50,
