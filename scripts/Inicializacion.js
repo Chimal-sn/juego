@@ -45,9 +45,6 @@ function updateGame() {
   });
   
 
-
-
-
   enemyBullets.forEach(bullet => {
     ctx.fillStyle = "purple";
     ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
