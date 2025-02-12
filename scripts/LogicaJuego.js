@@ -157,12 +157,7 @@ function updatePlayerMovement() {
     if (boss) {
       boss.patternTime += 0.05;
   
-      // Movimiento más complejo del jefe
-      let amplitudeX = 50 + bossLevel * 10;
-      let amplitudeY = 30 + bossLevel * 5;
-      let waveFactor = Math.sin(boss.patternTime) * Math.cos(boss.patternTime * 2);
-      boss.x = boss.startX + amplitudeX * waveFactor;
-      boss.y = boss.startY + amplitudeY * Math.sin(boss.patternTime * 2);
+      
   
       // Ataques en ráfagas
       boss.shootTimer--;
@@ -182,30 +177,7 @@ function updatePlayerMovement() {
         boss.shootTimer = Math.floor(Math.random() * 100) + 50;
       }
   
-      // NUEVA FASE: Cuando la salud baja del 50%, el jefe cambia su comportamiento
-      if (boss.health < boss.maxHealth * 0.5) {
-        boss.speed *= 1.5; // Aumentar la velocidad del jefe
-        boss.shootTimer = Math.floor(Math.random() * 50) + 30; // Disparos más frecuentes
-  
-        // Ataque especial: Invocar enemigos secundarios
-        if (Math.random() < 0.01) {
-          for (let i = 0; i < 3; i++) {
-            enemies.push({
-              x: boss.x + Math.random() * boss.width - 20,
-              y: boss.y + boss.height,
-              width: 30,
-              height: 30,
-              health: 1,
-              type: "dive",
-              speed: 5,
-              shootTimer: 0,
-              angle: 0,
-              pulseTime: 0,
-              color: "#00FFAA"
-            });
-          }
-        }
-      }
+      
     }
   }
   

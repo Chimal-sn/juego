@@ -15,12 +15,10 @@ function updateGame() {
   ctx.clearRect(-shakeOffsetX, -shakeOffsetY, canvas.width, canvas.height);
   drawStars();
   updateStars();
-
   updatePlayerMovement();
 
   if (boss) {
     updateBoss();
-    updateBossAnimation(boss);
     drawAnimatedBoss(boss);
   } else {
     if (bossCooldownTimer > 0) { bossCooldownTimer--; }

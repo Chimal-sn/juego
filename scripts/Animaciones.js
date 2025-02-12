@@ -34,62 +34,39 @@ function drawAnimatedEnemy(enemy) {
   ctx.restore();
 }
 
-function updateBossAnimation(boss) {
-  boss.angle = (boss.angle || 0) + 0.03;
-  boss.pulseTime = (boss.pulseTime || 0) + 0.1;
-  if (!boss.phaseTimer) boss.phaseTimer = 0;
-  boss.phaseTimer++;
-  if (boss.phaseTimer > 300 && !boss.minionsSpawned) {
-    for (let i = 0; i < 3; i++) {
-      enemies.push({
-        x: boss.x + Math.random()*boss.width - 20,
-        y: boss.y + boss.height,
-        width: 30, height: 30,
-        health: 1,
-        type: "dive",
-        speed: 5,
-        shootTimer: 0,
-        angle: 0,
-        pulseTime: 0,
-        color: "#00FFAA"
-      });
-    }
-    boss.minionsSpawned = true;
-  }
-  if (boss.phaseTimer > 600) { boss.phaseTimer = 0; boss.minionsSpawned = false; }
-}
+const spritePrimerBoss = new Image();
+spritePrimerBoss.src = "./sprites/primer_boss.png"; 
+
 
 function drawAnimatedBoss(boss) {
   ctx.save();
-  ctx.translate(boss.x + boss.width/2, boss.y + boss.height/2);
-  ctx.rotate(boss.angle || 0);
-  let scale = 1 + 0.05 * Math.sin(boss.pulseTime || 0);
-  ctx.scale(scale, scale);
-  ctx.beginPath();
-  const sides = 8;
-  const outerRadius = boss.width/2;
-  const innerRadius = outerRadius * 0.7;
-  let angle = Math.PI / 2;
-  let step = Math.PI / sides;
-  ctx.moveTo(outerRadius * Math.cos(angle), outerRadius * Math.sin(angle));
-  for (let i = 0; i < sides; i++){
-    angle += step;
-    ctx.lineTo(innerRadius * Math.cos(angle), innerRadius * Math.sin(angle));
-    angle += step;
-    ctx.lineTo(outerRadius * Math.cos(angle), outerRadius * Math.sin(angle));
+  ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 2);
+
+
+  // Actualizar el frame de la animación cada ciertos ciclos
+  boss.frameTimer++;
+  if (boss.frameTimer >= boss.frameSpeed) {
+    boss.frameIndex = (boss.frameIndex + 1) % boss.frameCount;  // Cambiar de frame
+    boss.frameTimer = 0;  // Resetear el temporizador
   }
-  ctx.closePath();
-  let grad = ctx.createLinearGradient(-boss.width/2, -boss.height/2, boss.width/2, boss.height/2);
-  grad.addColorStop(0, "#800");
-  grad.addColorStop(1, "#f00");
-  ctx.fillStyle = grad;
-  ctx.fill();
-  ctx.fillStyle = "white";
-  ctx.font = "16px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText("Boss Lv " + bossLevel + ": " + boss.health, 0, 5);
+
+
+  // Calcular la posición del frame actual en el sprite sheet
+  let spriteX = boss.frameIndex * boss.frameWidth;
+  let spriteY = 0; // Asumimos que la animación está en la primera fila
+
+  // Dibujar el frame actual del sprite
+  ctx.drawImage(
+    spritePrimerBoss,  // Imagen del sprite sheet
+    spriteX, spriteY,  // Posición del frame en el sprite sheet
+    boss.frameWidth, boss.frameHeight, // Tamaño del frame
+    -boss.width / 2, -boss.height / 2, // Posición en pantalla
+    boss.width, boss.height // Tamaño final del boss
+  );
+
   ctx.restore();
 }
+
 
 
 
