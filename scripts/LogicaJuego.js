@@ -248,7 +248,7 @@ function updatePlayerMovement() {
       if (checkCollisionRect(player, pw)) {
         if (pw.type === "shoot") { powerShootActive = true; powerShootTimer = 600; }
         else if (pw.type === "shield") { powerShieldActive = true; powerShieldTimer = 600 + upgradeData.shield * 50; }
-        else if (pw.type === "speed") { powerSpeedActive = true; powerSpeedTimer = 600; player.baseSpeed = 4 + upgradeData.speed + 2; }
+        else if (pw.type === "speed") { powerSpeedActive = true; powerSpeedTimer = 600; player.baseSpeed = 4 + upgradeData.speed + 20; }
         else if (pw.type === "multishot") { powerMultishotActive = true; powerMultishotTimer = 600; }
         else if (pw.type === "bomb") { powerBombActive = true; powerBombTimer = 600; }
         else if (pw.type === "slow") { powerSlowActive = true; powerSlowTimer = 600; }

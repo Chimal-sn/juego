@@ -61,20 +61,11 @@
   
   <!-- Contenedor del juego -->
   <div id="gameContainer">
-    <div id="scoreBoard">
-      <h2>Estado</h2>
-      <div id="stats">
-        Score: 0<br>
-        Vidas: 3<br>
-        Combo: x1<br>
-        Poderes: Ninguno<br>
-        Boss: Ninguno<br>
-        Mejor Score: <span id="highscore">0</span>
-      </div>
-      <button id="pauseBtn">Pausar</button>
-    </div>
     <div id="canvasContainer">
-      <canvas id="gameCanvas" width="700" height="700"></canvas>
+      <canvas id="gameCanvas" width="850" height="700"></canvas>
+      <div id="healthBar">
+        <h2>Vidas:</h2>  
+      </div>
     </div>
   </div>
   
@@ -92,7 +83,6 @@
   <script src="scripts/Animaciones.js"></script>
   <script src="scripts/Controlesjuego.js"></script>
   <script src="scripts/Efectos.js"></script>
-  <script src="scripts/Eventos.js"></script>
   <script src="scripts/Inicializacion.js"></script>
   <script src="scripts/Iniciar.js"></script>
   <script src="scripts/Jugador.js"></script>

@@ -29,15 +29,13 @@ function updateGame() {
       drawAnimatedEnemy(enemy);
     });
   }
-  updateScoreBoard();
   updateBullets();
   updateEnemyBullets();
   updatePowerUps();
   checkCollisions();
   updatePowerUpEffects();
-
   drawPlayer();
-
+  
   bullets.forEach(bullet => {
     bullet.draw(ctx);  // Aquí llamas al método draw de cada bala
   });
@@ -64,7 +62,7 @@ function updateGame() {
   drawExplosions();
 
   score += (powerSlowActive ? 0.5 : 1);
-  updateScoreBoard();
+  
 
   ctx.restore();
   requestAnimationFrame(updateGame);
