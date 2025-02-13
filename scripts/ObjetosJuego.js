@@ -18,7 +18,7 @@ function initGameVariables(level) {
     powerUps = [];
     boss = null;
     bossLevel = level;
-    nextBossScore = 0;
+    nextBossScore = 50000;
     bossCooldownTimer = 0;
     powerShootActive = false; powerShootTimer = 0;
     powerShieldActive = false; powerShieldTimer = 0;
@@ -41,8 +41,8 @@ function initGameVariables(level) {
       startY: 50,
       x: canvas.width / 2 - 50,
       y: 50,
-      width: 150,
-      height: 140,
+      width: 210,
+      height: 192,
       health: 50 * bossLevel,
       speed: 2 + bossLevel * 0.5,
       shootTimer: 100,

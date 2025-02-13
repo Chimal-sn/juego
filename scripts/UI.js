@@ -1,4 +1,14 @@
 // gameUI.js
+
+function actualizarTamaño(){
+  const canvas = document.getElementById("gameCanvas");
+  canvas.width = window.innerWidth - 10; // Ajustar el tamaño real del canvas
+  canvas.height = window.innerHeight -10 ; // Ajustar el tamaño real del canvas
+  const ctx = canvas.getContext("2d");
+}
+
+
+
 function showNarrative(level) {
     currentLevel = level;
     narrativeTitle.innerText = narrativeData[level].title;
@@ -55,8 +65,34 @@ function showNarrative(level) {
     window.open(url, "_blank");
   }
 
+
+  let heartImage = new Image();
+  heartImage.src = './sprites/vida_jugador.png'; // Ruta de la imagen de los corazones
+
+
   function updateScoreBoard() {
-    const scoreBoard = document.getElementById("stats");
+    console.log(player.lives);
+
+    // Posición inicial de los corazones en la parte inferior izquierda
+    const startX = 20;  // Empieza desde 20 píxeles de distancia desde la izquierda
+    const startY = canvas.height - 50;  // Empieza desde 100 píxeles arriba del borde inferior
+    const scaleFactor = 0.5;  // Cambia este valor para hacer la imagen más grande o más pequeña
+
+    // Nuevas dimensiones basadas en el factor de escala
+    const newWidth = 120 * scaleFactor;  // Ancho escalado
+    const newHeight = 61 * scaleFactor;  // Alto escalado
+
+
+    for (let i = 0; i < player.lives; i++) {
+      ctx.drawImage(heartImage, startX + i * 60, startY, newWidth, newHeight);  // Usa las nuevas dimensiones
+    }
+
+   
+  }
+  
+
+
+   /*const scoreBoard = document.getElementById("stats");
   
     // Construir el contenido del scoreboard
     let powerStatus = [];
@@ -82,5 +118,4 @@ function showNarrative(level) {
       <p><strong>Boss:</strong> ${bossStatus}</p>
       <p><strong>Mejor Score:</strong> ${localStorage.getItem("highscore") || 0}</p>
     `;
-  }
-  
+    */

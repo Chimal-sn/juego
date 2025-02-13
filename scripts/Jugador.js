@@ -128,3 +128,10 @@ function showNotification(message) {
   // Aquí podrías manipular el DOM o el canvas para mostrar mensajes en el juego.
   console.log(message); // Por ahora lo mostramos en la consola.
 }
+
+
+
+
+
+
+

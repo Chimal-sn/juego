@@ -6,6 +6,8 @@ function updateGame() {
   }
   if (paused) return;
 
+  actualizarTamaño();
+  
   let shakeOffsetX = (shake > 0) ? Math.random() * shake - shake / 2 : 0;
   let shakeOffsetY = (shake > 0) ? Math.random() * shake - shake / 2 : 0;
   if (shake > 0) { shake -= 0.5; }
@@ -35,6 +37,7 @@ function updateGame() {
   checkCollisions();
   updatePowerUpEffects();
   drawPlayer();
+
   
   bullets.forEach(bullet => {
     bullet.draw(ctx);  // Aquí llamas al método draw de cada bala
@@ -60,11 +63,10 @@ function updateGame() {
 
   updateExplosions();
   drawExplosions();
-
   score += (powerSlowActive ? 0.5 : 1);
-  
-
+  updateScoreBoard();
   ctx.restore();
+  
   requestAnimationFrame(updateGame);
 }
 

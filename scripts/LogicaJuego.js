@@ -289,14 +289,3 @@ function updatePlayerMovement() {
     if (comboTimer > 0) { comboTimer--; } else { comboMultiplier = 1; }
   }
   
-  function updateScoreBoard() {
-    let powerStatus = [];
-    if (powerShootActive) powerStatus.push("Disparo (" + Math.ceil(powerShootTimer/60) + "s)");
-    if (powerShieldActive) powerStatus.push("Escudo (" + Math.ceil(powerShieldTimer/60) + "s)");
-    if (powerSpeedActive) powerStatus.push("Velocidad (" + Math.ceil(powerSpeedTimer/60) + "s)");
-    if (powerMultishotActive) powerStatus.push("Multishot (" + Math.ceil(powerMultishotTimer/60) + "s)");
-    if (powerBombActive) powerStatus.push("Bomba (" + Math.ceil(powerBombTimer/60) + "s)");
-    if (powerSlowActive) powerStatus.push("SlowMo (" + Math.ceil(powerSlowTimer/60) + "s)");
-    let bossStatus = boss ? "Lv " + bossLevel + " (" + boss.health + ")" : (bossCooldownTimer > 0 ? "En espera" : "Ninguno");
-    statsDiv.innerHTML = `Score: ${Math.floor(score)}<br>Vidas: ${player.lives}<br>Combo: x${comboMultiplier.toFixed(1)}<br>Poderes: ${powerStatus.length ? powerStatus.join(", ") : "Ninguno"}<br>Boss: ${bossStatus}<br>Mejor Score: ${localStorage.getItem("highscore") || 0}`;
-  }
