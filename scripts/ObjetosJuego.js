@@ -9,7 +9,7 @@ function initGameVariables(level) {
     vx: 0,
     vy: 0,
     lives: 3 + upgradeData.life,
-    color: "red"
+    color: "red",
   };
 
     enemies = [];
@@ -18,7 +18,7 @@ function initGameVariables(level) {
     powerUps = [];
     boss = null;
     bossLevel = level;
-    nextBossScore = 50000;
+    nextBossScore = 0;
     bossCooldownTimer = 0;
     powerShootActive = false; powerShootTimer = 0;
     powerShieldActive = false; powerShieldTimer = 0;

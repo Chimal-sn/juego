@@ -155,31 +155,23 @@ function updatePlayerMovement() {
   
   function updateBoss() {
     if (boss) {
-      boss.patternTime += 0.05;
-  
-      
-  
-      // Ataques en ráfagas
-      boss.shootTimer--;
-      if (boss.shootTimer <= 0) {
-        let angleIncrement = Math.PI / 4; // Disparos en 8 direcciones
-        for (let i = 0; i < 8; i++) {
-          let angle = i * angleIncrement;
-          enemyBullets.push({
-            x: boss.x + boss.width / 2 - 5,
-            y: boss.y + boss.height,
-            width: 10,
-            height: 20,
-            vx: Math.cos(angle) * 4,
-            vy: Math.sin(angle) * 4
-          });
+        boss.patternTime += 0.05;
+        // Ataque simple (una bala hacia el frente)
+        boss.shootTimer--;
+        if (boss.shootTimer <= 0) {
+            enemyBullets.push({
+                x: boss.x + boss.width / 2 - 5, // Centrar la bala
+                y: boss.y + boss.height,
+                width: 10,
+                height: 20,
+                vx: 0,  // No se mueve en X
+                vy: 4   // Se mueve solo hacia abajo
+            });
+            boss.shootTimer = Math.floor(Math.random() * 100) + 50; // Tiempo entre disparos
         }
-        boss.shootTimer = Math.floor(Math.random() * 100) + 50;
-      }
-  
-      
     }
   }
+
   
 
   function checkCollisionRect(a, b) {
@@ -230,19 +222,30 @@ function updatePlayerMovement() {
       });
     });
   
-    enemyBullets.forEach((bullet, index) => {
-      if (checkCollisionRect(bullet, player)) {
-        if (powerShieldActive) {
-          enemyBullets.splice(index, 1);
-          score += 5;
-        } else {
-          player.lives--;
-          enemyBullets.splice(index, 1);
-          comboMultiplier = 1;
-          if (player.lives <= 0) gameOver = true;
-        }
+    // Función para verificar colisión con balas del jefe
+enemyBullets.forEach((bullet, index) => {
+  if (checkCollisionRect(bullet, player)) {
+    // Si el jugador tiene escudo, solo eliminar la bala
+    if (powerShieldActive) {
+      enemyBullets.splice(index, 1);  // Elimina la bala del jefe
+      score += 5;
+    } else {
+      // Verificar si el jugador ya ha sido golpeado por una bala en este ciclo
+      if (!bullet.Golpeado) {
+        bullet.Golpeado = true;  // Marcar que el jugador ha sido golpeado por una bala
+        player.lives--;  // Resta una vida solo si no ha sido golpeado aún
+        console.log("Restando vida. Vidas después: ", player.lives);
       }
-    });
+      
+      enemyBullets.splice(index, 1);  // Elimina la bala del jefe
+      comboMultiplier = 1;
+      if (player.lives <= 0) {
+        gameOver = true;
+      }
+    }
+  }
+});
+    
   
     powerUps.forEach((pw, index) => {
       if (checkCollisionRect(player, pw)) {
@@ -288,4 +291,10 @@ function updatePlayerMovement() {
     if (powerSlowActive) { powerSlowTimer--; if (powerSlowTimer <= 0) powerSlowActive = false; }
     if (comboTimer > 0) { comboTimer--; } else { comboMultiplier = 1; }
   }
+
+
+  function resetHitByBullet() {
+    player.hitByBullet = false;  // Resetea el estado de la colisión para la siguiente actualización
+  } 
+
   

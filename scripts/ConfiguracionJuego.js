@@ -42,12 +42,8 @@ const upgradeDiv = document.getElementById("upgradeScreen");
 const levelCompleteDiv = document.getElementById("levelComplete");
 const gameContainer = document.getElementById("gameContainer");
 const pauseBtn = document.getElementById("pauseBtn");
-const statsDiv = document.getElementById("stats");
 const highscoreSpan = document.getElementById("highscore")
-
-
     
-
 const canvas = document.getElementById("gameCanvas");
 canvas.width = window.innerWidth - 10; // Ajustar el tamaño real del canvas
 canvas.height = window.innerHeight -10 ; // Ajustar el tamaño real del canvas

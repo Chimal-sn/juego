@@ -40,9 +40,8 @@ spritePrimerBoss.src = "./sprites/primer_boss.png";
 
 function drawAnimatedBoss(boss) {
   ctx.save();
-  ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 2);
-
-
+  ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 3);
+  
   // Actualizar el frame de la animación cada ciertos ciclos
   boss.frameTimer++;
   if (boss.frameTimer >= boss.frameSpeed) {
