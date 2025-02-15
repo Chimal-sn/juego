@@ -27,7 +27,6 @@ function updateGame() {
     else if (score >= nextBossScore) { spawnBoss(); }
     updateEnemies();
     enemies.forEach(enemy => {
-      updateEnemyAnimation(enemy);
       drawAnimatedEnemy(enemy);
     });
   }

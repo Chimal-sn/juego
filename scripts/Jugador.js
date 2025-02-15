@@ -44,6 +44,7 @@ spriteEscudo.src = "./sprites/escudo.png"; // Imagen del escudo
 const spriteSheet = new Image();
 spriteSheet.src = "./sprites/PosicionInicial_Jugador.png"; // Imagen cuando está quieto
 
+
 const spriteRight = new Image();
 spriteRight.src = "./sprites/Derecha_Jugador.png"; // Imagen cuando se mueve a la derecha
 

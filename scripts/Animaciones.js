@@ -1,38 +1,79 @@
-// gameAnimations.js
-function updateEnemyAnimation(enemy) {
-  enemy.angle = (enemy.angle || 0) + 0.05;
-  enemy.pulseTime = (enemy.pulseTime || 0) + 0.1;
-}
 
 function drawAnimatedEnemy(enemy) {
   ctx.save();
-  ctx.translate(enemy.x + enemy.width/2, enemy.y + enemy.height/2);
-  ctx.rotate(enemy.angle || 0);
-  let scale = 1 + 0.1 * Math.sin(enemy.pulseTime || 0);
-  ctx.scale(scale, scale);
-  ctx.beginPath();
-  const spikes = 5;
-  const outerRadius = enemy.width/2;
-  const innerRadius = outerRadius * 0.5;
-  let rot = Math.PI / 2 * 3;
-  let step = Math.PI / spikes;
-  ctx.moveTo(0, -outerRadius);
-  for (let i = 0; i < spikes; i++){
-    let x = Math.cos(rot) * outerRadius;
-    let y = Math.sin(rot) * outerRadius;
-    ctx.lineTo(x, y);
-    rot += step;
-    x = Math.cos(rot) * innerRadius;
-    y = Math.sin(rot) * innerRadius;
-    ctx.lineTo(x, y);
-    rot += step;
+  ctx.translate(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+
+  switch (enemy.type) {
+    case "normal":
+      drawBasicEnemy(enemy);
+      break;
+      
+    case "shooter":
+      drawShooterEnemy(enemy);
+      break;
+
+    case "teleport":
+      drawTeleportEnemy(enemy);
+      break;
   }
-  ctx.lineTo(0, -outerRadius);
-  ctx.closePath();
-  ctx.fillStyle = enemy.color || "#FF6600";
-  ctx.fill();
+
   ctx.restore();
 }
+
+
+function drawBasicEnemy(enemy) {
+  ctx.fillStyle = enemy.color || "#FF6600";
+  ctx.fillRect(-enemy.width / 2, -enemy.height / 2, enemy.width, enemy.height);
+}
+
+function drawShooterEnemy(enemy) {
+  ctx.fillStyle = enemy.color || "#FF3333";
+  ctx.fillRect(-enemy.width / 2, -enemy.height / 2, enemy.width, enemy.height);
+  
+  // Dibujar un "cañón" en la parte superior
+  ctx.fillStyle = "#000";
+  ctx.fillRect(-5, -enemy.height / 2 - 10, 10, 15);
+}
+
+
+
+
+const spriteTeleportEnemy = new Image();
+spriteTeleportEnemy.src = "./sprites/Enemigos/TeleportEnemy.png";
+
+
+function drawTeleportEnemy(enemy) {
+  ctx.save();
+
+  enemy.frameTimer++;
+  if (enemy.frameTimer >= enemy.frameSpeed) {
+    enemy.frameIndex = (enemy.frameIndex + 1) % enemy.frameCount;  // Cambiar de frame
+    enemy.frameTimer = 0;  // Resetear el temporizador
+ }
+
+
+ // Calcular la posición del frame actual en el sprite sheet
+  let spriteX = enemy.frameIndex * enemy.frameWidth;
+  let spriteY = 0; // Asumimos que la animación está en la primera fila
+
+ // Dibujar el frame actual del sprite
+  ctx.drawImage(
+    spriteTeleportEnemy,  // Imagen del sprite sheet
+    spriteX, spriteY,  // Posición del frame en el sprite sheet
+    enemy.frameWidth, enemy.frameHeight, // Tamaño del frame
+    -enemy.width / 2, -enemy.height / 2, // Posición en pantalla
+    enemy.width, enemy.height // Tamaño final del boss
+  );
+
+
+  ctx.restore();
+}
+
+
+
+
+
+
 
 const spritePrimerBoss = new Image();
 spritePrimerBoss.src = "./sprites/primer_boss.png"; 

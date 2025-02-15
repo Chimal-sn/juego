@@ -11,14 +11,14 @@ function initGameVariables(level) {
     lives: 3 + upgradeData.life,
     color: "red",
   };
-
+    Enemy = null;
     enemies = [];
     bullets = [];
     enemyBullets = [];
     powerUps = [];
     boss = null;
     bossLevel = level;
-    nextBossScore = 0;
+    nextBossScore = 100000;
     bossCooldownTimer = 0;
     powerShootActive = false; powerShootTimer = 0;
     powerShieldActive = false; powerShieldTimer = 0;
@@ -60,5 +60,71 @@ function initGameVariables(level) {
       frameWidth: 630,       // Ancho de un frame en el sprite
       frameHeight: 576       // Alto de un frame en el sprite
     };
-    
   }
+
+  class Enemy {
+    constructor(x, y, width, height, speed, health, type, color) {
+      this.x = x;
+      this.y = y;
+      this.width = width;
+      this.height = height;
+      this.speed = speed;
+      this.health = health;
+      this.type = type;
+      this.color = color;
+      this.frameIndex = 0; // Índice del frame para animaciones
+      this.frameTimer = 0; // Temporizador para los frames
+      this.frameSpeed = 6; // Velocidad de cambio de frame (cuantos ciclos antes de cambiar)
+      this.frameCount = 14; // Total de frames en la animación
+      this.frameWidth = 320; // Ancho de un frame en el sprite
+      this.frameHeight = 320; // Alto de un frame en el sprite
+    }
+    
+    update() {
+      this.y += this.speed; // Movimiento básico (puede ser sobrescrito)
+    }
+  }
+
+  class NormalEnemy extends Enemy {
+    constructor(x, y) {
+      super(x, y, 40, 40, 3, 1, "normal", "#FF6600");
+    }
+  }
+
+  
+  class ShooterEnemy extends Enemy {
+    constructor(x, y) {
+      super(x, y, 40, 40, 2, 2, "shooter", "#FF3333");
+      this.shootTimer = Math.floor(Math.random() * 100) + 50;
+    }
+  
+    update() {
+      super.update();
+      this.shootTimer--;
+      if (this.shootTimer <= 0) {
+        enemyBullets.push({ x: this.x + this.width / 2 - 5, y: this.y + this.height, width: 10, height: 20 });
+        this.shootTimer = Math.floor(Math.random() * 100) + 50;
+      }
+    }
+  }
+
+
+
+
+  class TeleportEnemy extends Enemy {
+    constructor(x, y) {
+      super(x, y, 60, 60, 3, 1, "teleport", "#8800FF");
+      this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+    }
+  
+    update() {
+      this.teleportTimer--;
+      if (this.teleportTimer <= 0) {
+        this.x = Math.random() * (canvas.width - this.width);
+        this.y = Math.random() * (canvas.height / 2);
+        this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+      }
+    }
+  }
+  
+
