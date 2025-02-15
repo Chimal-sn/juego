@@ -120,10 +120,16 @@ function initGameVariables(level) {
     update() {
       this.teleportTimer--;
       if (this.teleportTimer <= 0) {
-        this.x = Math.random() * (canvas.width - this.width);
-        this.y = Math.random() * (canvas.height / 2);
-        this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+        let offsetX = (Math.random() - 0.5) * 200; // Desplazamiento aleatorio en X (-100 a 100)
+        let offsetY = (Math.random() - 0.5) * 200; // Desplazamiento aleatorio en Y (-100 a 100)
+
+        // Nueva posición basada en la posición del jugador
+        this.x = Math.max(0, Math.min(canvas.width - this.width, player.x + offsetX));
+        this.y = Math.max(0, Math.min(canvas.height - this.height, player.y + offsetY));
+
+        this.teleportTimer = Math.floor(Math.random() * 200) + 100; // Reiniciar temporizador
       }
+
     }
   }
   
