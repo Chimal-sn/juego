@@ -45,26 +45,31 @@ spriteTeleportEnemy.src = "./sprites/Enemigos/TeleportEnemy.png";
 function drawTeleportEnemy(enemy) {
   ctx.save();
 
-  enemy.frameTimer++;
-  if (enemy.frameTimer >= enemy.frameSpeed) {
-    enemy.frameIndex = (enemy.frameIndex + 1) % enemy.frameCount;  // Cambiar de frame
-    enemy.frameTimer = 0;  // Resetear el temporizador
- }
+  // Verifica si el portal está activado
+  if (enemy.portal) {
+    enemy.portal.drawPortal(ctx);  // Llama a drawPortal solo si el portal existe
+    console.log(" dibujado");
+  } 
 
+    enemy.frameTimer++;
+    if (enemy.frameTimer >= enemy.frameSpeed) {
+      enemy.frameIndex = (enemy.frameIndex + 1) % enemy.frameCount;  // Cambiar de frame
+      enemy.frameTimer = 0;  // Resetear el temporizador
+  }
 
- // Calcular la posición del frame actual en el sprite sheet
-  let spriteX = enemy.frameIndex * enemy.frameWidth;
-  let spriteY = 0; // Asumimos que la animación está en la primera fila
+  // Calcular la posición del frame actual en el sprite sheet
+    let spriteX = enemy.frameIndex * enemy.frameWidth;
+    let spriteY = 0; // Asumimos que la animación está en la primera fila
 
- // Dibujar el frame actual del sprite
-  ctx.drawImage(
-    spriteTeleportEnemy,  // Imagen del sprite sheet
-    spriteX, spriteY,  // Posición del frame en el sprite sheet
-    enemy.frameWidth, enemy.frameHeight, // Tamaño del frame
-    -enemy.width / 2, -enemy.height / 2, // Posición en pantalla
-    enemy.width, enemy.height // Tamaño final del boss
-  );
-
+  // Dibujar el frame actual del sprite
+    ctx.drawImage(
+      spriteTeleportEnemy,  // Imagen del sprite sheet
+      spriteX, spriteY,  // Posición del frame en el sprite sheet
+      enemy.frameWidth, enemy.frameHeight, // Tamaño del frame
+      -enemy.width / 2, -enemy.height / 2, // Posición en pantalla
+      enemy.width, enemy.height // Tamaño final del boss
+    );
+  
 
   ctx.restore();
 }
@@ -83,6 +88,8 @@ function drawAnimatedBoss(boss) {
   ctx.save();
   ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 3);
   
+
+
   // Actualizar el frame de la animación cada ciertos ciclos
   boss.frameTimer++;
   if (boss.frameTimer >= boss.frameSpeed) {

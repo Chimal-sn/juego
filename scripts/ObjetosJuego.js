@@ -113,24 +113,92 @@ function initGameVariables(level) {
 
   class TeleportEnemy extends Enemy {
     constructor(x, y) {
-      super(x, y, 60, 60, 3, 1, "teleport", "#8800FF");
-      this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+        super(x, y, 60, 60, 3, 1, "teleport", "#8800FF");
+        this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+        this.portal = null; // Mantén el portal como parte del enemigo
     }
-  
+
     update() {
-      this.teleportTimer--;
-      if (this.teleportTimer <= 0) {
-        let offsetX = (Math.random() - 0.5) * 200; // Desplazamiento aleatorio en X (-100 a 100)
-        let offsetY = (Math.random() - 0.5) * 200; // Desplazamiento aleatorio en Y (-100 a 100)
+        this.teleportTimer--;
 
-        // Nueva posición basada en la posición del jugador
-        this.x = Math.max(0, Math.min(canvas.width - this.width, player.x + offsetX));
-        this.y = Math.max(0, Math.min(canvas.height - this.height, player.y + offsetY));
+        // Activar el portal antes del teletransporte
+        if (!this.portal && this.teleportTimer <= 22 * 3) {
+          this.portal = new Portal(0, 0)
+        }
 
-        this.teleportTimer = Math.floor(Math.random() * 200) + 100; // Reiniciar temporizador
-      }
+        if (this.teleportTimer <= 0) {
+            let minDistance = 150;
+            let maxDistance = 300;
 
+            let angle = Math.random() * Math.PI * 2;
+            let distance = Math.random() * (maxDistance - minDistance) + minDistance;
+
+            let offsetX = Math.cos(angle) * distance;
+            let offsetY = Math.sin(angle) * distance;
+
+            // Teletransportar enemigo
+            this.x = Math.max(0, Math.min(canvas.width - this.width, player.x + offsetX));
+            this.y = Math.max(0, Math.min(canvas.height - this.height, player.y + offsetY));
+
+            // Desactivar portal después del teletransporte
+            this.portal = null;
+
+            // Reiniciar el temporizador de teletransporte
+            this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+        }
     }
   }
+
+
+
+  class Portal {
+    constructor(x, y, frameSpeed = 3) {
+        this.x = x;
+        this.y = y;
+        this.width = 64;
+        this.height = 64;
+        this.sprite = new Image();
+        this.sprite.onload = () => { this.loaded = true; }; // Asegura que la imagen se haya cargado
+        this.sprite.src = "./sprites/Enemigos/Portal.png";
+  
+        this.frameIndex = 0;
+        this.frameTimer = 0;
+        this.frameSpeed = frameSpeed;
+        this.totalFrames = 22;
+        this.frameWidth = 320;
+        this.frameHeight = 320;
+        this.active = true;
+        this.loaded = false;
+    }
+  
+    drawPortal(ctx) {
+        if (!this.active || !this.loaded) return; // Esperar a que la imagen esté lista
+
+
+
+        console.log(`Dibujando portal en: X: ${this.x}, Y: ${this.y}`);
+
+        this.frameTimer++;
+        if (this.frameTimer >= this.frameSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % this.totalFrames;
+            this.frameTimer = 0;
+        }
+  
+        let spriteX = this.frameIndex * this.frameWidth;
+        let spriteY = 0;
+        
+        ctx.drawImage(
+          this.sprite,  
+          spriteX, spriteY,
+          this.frameWidth, this.frameHeight,
+          this.x - this.width / 2, this.y - this.height / 2,  // Con this.x = 0, this.y = 0, se dibuja en (-width/2, -height/2)
+          this.width, this.height
+        );
+      
+    }
+  }
+  
+
+
   
 
