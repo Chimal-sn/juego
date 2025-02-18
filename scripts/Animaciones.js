@@ -48,20 +48,21 @@ function drawTeleportEnemy(enemy) {
   // Verifica si el portal está activado
   if (enemy.portal) {
     enemy.portal.drawPortal(ctx);  // Llama a drawPortal solo si el portal existe
-    console.log(" dibujado");
   } 
+  
 
+  if (!enemy.istp) {
     enemy.frameTimer++;
     if (enemy.frameTimer >= enemy.frameSpeed) {
       enemy.frameIndex = (enemy.frameIndex + 1) % enemy.frameCount;  // Cambiar de frame
       enemy.frameTimer = 0;  // Resetear el temporizador
-  }
+    }
 
-  // Calcular la posición del frame actual en el sprite sheet
+    // Calcular la posición del frame actual en el sprite sheet
     let spriteX = enemy.frameIndex * enemy.frameWidth;
     let spriteY = 0; // Asumimos que la animación está en la primera fila
 
-  // Dibujar el frame actual del sprite
+    // Dibujar el frame actual del sprite
     ctx.drawImage(
       spriteTeleportEnemy,  // Imagen del sprite sheet
       spriteX, spriteY,  // Posición del frame en el sprite sheet
@@ -69,7 +70,9 @@ function drawTeleportEnemy(enemy) {
       -enemy.width / 2, -enemy.height / 2, // Posición en pantalla
       enemy.width, enemy.height // Tamaño final del boss
     );
-  
+  }else{
+    
+  }
 
   ctx.restore();
 }

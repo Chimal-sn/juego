@@ -116,17 +116,30 @@ function initGameVariables(level) {
         super(x, y, 60, 60, 3, 1, "teleport", "#8800FF");
         this.teleportTimer = Math.floor(Math.random() * 200) + 100;
         this.portal = null; // Mantén el portal como parte del enemigo
+        this.istp = false;
     }
 
     update() {
         this.teleportTimer--;
 
         // Activar el portal antes del teletransporte
-        if (!this.portal && this.teleportTimer <= 22 * 3) {
+        if (!this.portal && this.teleportTimer == ((22 * 3)* 2)) {
           this.portal = new Portal(0, 0)
         }
+        
+        if (this.teleportTimer == (22 * 3)-1) {
+          this.istp = true;
+          if (this.portal) {
+            this.portal.reversa = true;
+          }
+        }
+        
 
-        if (this.teleportTimer <= 0) {
+        if (this.teleportTimer == 0) {
+
+            this.portal = null;
+            this.istp = false;
+            
             let minDistance = 150;
             let maxDistance = 300;
 
@@ -141,13 +154,14 @@ function initGameVariables(level) {
             this.y = Math.max(0, Math.min(canvas.height - this.height, player.y + offsetY));
 
             // Desactivar portal después del teletransporte
-            this.portal = null;
+            
+            
 
             // Reiniciar el temporizador de teletransporte
             this.teleportTimer = Math.floor(Math.random() * 200) + 100;
         }
     }
-  }
+  }     
 
 
 
@@ -169,6 +183,7 @@ function initGameVariables(level) {
         this.frameHeight = 320;
         this.active = true;
         this.loaded = false;
+        this.reversa = false;
     }
   
     drawPortal(ctx) {
@@ -176,24 +191,31 @@ function initGameVariables(level) {
 
 
 
-        console.log(`Dibujando portal en: X: ${this.x}, Y: ${this.y}`);
-
+      if (!this.reversa){
         this.frameTimer++;
         if (this.frameTimer >= this.frameSpeed) {
             this.frameIndex = (this.frameIndex + 1) % this.totalFrames;
             this.frameTimer = 0;
         }
-  
-        let spriteX = this.frameIndex * this.frameWidth;
-        let spriteY = 0;
-        
-        ctx.drawImage(
-          this.sprite,  
-          spriteX, spriteY,
-          this.frameWidth, this.frameHeight,
-          this.x - this.width / 2, this.y - this.height / 2,  // Con this.x = 0, this.y = 0, se dibuja en (-width/2, -height/2)
-          this.width, this.height
-        );
+      }else{
+        // Mismo delay en reversa
+        this.frameTimer++;
+        if (this.frameTimer >= this.frameSpeed) {
+          this.frameIndex = (this.frameIndex - 1 + this.totalFrames) % this.totalFrames;
+          this.frameTimer = 0;
+        }
+      }
+
+      let spriteX = this.frameIndex * this.frameWidth;
+      let spriteY = 0;
+      
+      ctx.drawImage(
+        this.sprite,  
+        spriteX, spriteY,
+        this.frameWidth, this.frameHeight,
+        this.x - this.width / 2, this.y - this.height / 2,  // Con this.x = 0, this.y = 0, se dibuja en (-width/2, -height/2)
+        this.width, this.height
+      );
       
     }
   }
