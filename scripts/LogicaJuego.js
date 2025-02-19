@@ -51,7 +51,7 @@ function updatePlayerMovement() {
     if (!boss) {
       enemies = enemies.filter(enemy => enemy.y < canvas.height); // Filtrar enemigos fuera de la pantalla
       
-      const maxEnemiesOnScreen = 5 + Math.floor(currentLevel * 1.5);
+      const maxEnemiesOnScreen = 1 //+ Math.floor(currentLevel * 1.5);
       
       if (Math.random() < 0.05 && enemies.length < maxEnemiesOnScreen) {
         spawnEnemy();
@@ -62,7 +62,7 @@ function updatePlayerMovement() {
   }
 
   function spawnEnemy() {
-    let enemyTypes = [NormalEnemy, ShooterEnemy, TeleportEnemy]; // Agregar más tipos aquí
+    let enemyTypes = [/*NormalEnemy, ShooterEnemy*/ TeleportEnemy]; // Agregar más tipos aquí
     let enemyClass = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
     let x = Math.random() * (canvas.width - 40);
     let y = 0;
@@ -126,19 +126,19 @@ function updatePlayerMovement() {
   
   function checkCollisions() {
     enemies.forEach((enemy, index) => {
-      if (checkCollisionRect(player, enemy)) {
-        if (powerShieldActive) {
-          spawnExplosion(enemy.x + enemy.width/2, enemy.y + enemy.height/2);
-          enemies.splice(index, 1);
-          score += 10;
-          comboMultiplier += 0.1;
-        } else {
-          player.lives--;
-          spawnExplosion(enemy.x + enemy.width/2, enemy.y + enemy.height/2);
-          enemies.splice(index, 1);
-          comboMultiplier = 1;
-          if (player.lives <= 0) gameOver = true;
-        }
+      if (!enemy.istp && checkCollisionRect(player, enemy)) {  // Solo colisiona si istp es falso
+          if (powerShieldActive) {
+              spawnExplosion(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+              enemies.splice(index, 1);
+              score += 10;
+              comboMultiplier += 0.1;
+          } else {
+              player.lives--;
+              spawnExplosion(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+              enemies.splice(index, 1);
+              comboMultiplier = 1;
+              if (player.lives <= 0) gameOver = true;
+          }
       }
     });
   

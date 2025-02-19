@@ -114,13 +114,18 @@ function initGameVariables(level) {
   class TeleportEnemy extends Enemy {
     constructor(x, y) {
         super(x, y, 60, 60, 3, 1, "teleport", "#8800FF");
-        this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+        this.teleportTimer = Math.floor(Math.random() * 200) + 200;
         this.portal = null; // Mantén el portal como parte del enemigo
         this.istp = false;
+        this.timetp = ((this.teleportTimer) + (22 * 3));
+        this.reversa = -1;
+          
     }
 
     update() {
         this.teleportTimer--;
+        this.timetp--;
+        this.reversa--;
 
         // Activar el portal antes del teletransporte
         if (!this.portal && this.teleportTimer == ((22 * 3)* 2)) {
@@ -131,35 +136,40 @@ function initGameVariables(level) {
           this.istp = true;
           if (this.portal) {
             this.portal.reversa = true;
+            
           }
         }
         
 
         if (this.teleportTimer == 0) {
 
+            // Teletransportar al enemigo
             this.portal = null;
-            this.istp = false;
-            
-            let minDistance = 150;
-            let maxDistance = 300;
 
-            let angle = Math.random() * Math.PI * 2;
-            let distance = Math.random() * (maxDistance - minDistance) + minDistance;
+              
+            let NuevaPosicionx = Math.max(0, Math.min(canvas.width - this.width, player.x ));
+            let NuevaPosiciony = Math.max(0, Math.min(canvas.height - this.height, player.y ));
 
-            let offsetX = Math.cos(angle) * distance;
-            let offsetY = Math.sin(angle) * distance;
-
-            // Teletransportar enemigo
-            this.x = Math.max(0, Math.min(canvas.width - this.width, player.x + offsetX));
-            this.y = Math.max(0, Math.min(canvas.height - this.height, player.y + offsetY));
-
-            // Desactivar portal después del teletransporte
-            
-            
-
-            // Reiniciar el temporizador de teletransporte
-            this.teleportTimer = Math.floor(Math.random() * 200) + 100;
+            this.x = NuevaPosicionx;
+            this.y = NuevaPosiciony;
+            this.portal = new Portal(0,0)
         }
+
+        if (this.timetp == 0) {
+            // Reiniciar el temporizador de teletransporte
+          console.log("Teleportado",this.x, this.y);
+          this.teleportTimer = Math.floor(Math.random() * 200) + 200;
+          this.timetp = this.teleportTimer + (22 * 3);
+          this.portal.reversa = true;
+          this.istp = false;
+          this.reversa = (22 * 3) - 4;
+        }
+
+        if (this.reversa == 0) {
+          this.portal = null;
+        }
+
+
     }
   }     
 
@@ -184,6 +194,7 @@ function initGameVariables(level) {
         this.active = true;
         this.loaded = false;
         this.reversa = false;
+      
     }
   
     drawPortal(ctx) {
