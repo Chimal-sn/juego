@@ -51,7 +51,7 @@ function updatePlayerMovement() {
     if (!boss) {
       enemies = enemies.filter(enemy => enemy.y < canvas.height); // Filtrar enemigos fuera de la pantalla
       
-      const maxEnemiesOnScreen = 1 //+ Math.floor(currentLevel * 1.5);
+      const maxEnemiesOnScreen = 5 //+ Math.floor(currentLevel * 1.5);
       
       if (Math.random() < 0.05 && enemies.length < maxEnemiesOnScreen) {
         spawnEnemy();
@@ -62,7 +62,7 @@ function updatePlayerMovement() {
   }
 
   function spawnEnemy() {
-    let enemyTypes = [/*NormalEnemy, ShooterEnemy*/ TeleportEnemy]; // Agregar más tipos aquí
+    let enemyTypes = [NormalEnemy /* ShooterEnemy */, TeleportEnemy]; // Agregar más tipos aquí
     let enemyClass = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
     let x = Math.random() * (canvas.width - 40);
     let y = 0;

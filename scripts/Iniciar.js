@@ -1,65 +1,67 @@
-// gameStars.js
-const starCountBack = 100, starCountFront = 50;
-let starsBack = [], starsFront = [];
+const SpriteFondo = new Image();
+SpriteFondo.src = "./sprites/Fondo/fondo.png";
 
-/*
 
-function resizeCanvas() {
-  const canvas = document.getElementById("gameCanvas");
-  canvas.width = window.innerWidth * 0.5;  // 90% del ancho de la ventana
-  canvas.height = window.innerHeight * 1; // 90% del alto de la ventana
+
+const Spriteplaneta1 = new Image();
+Spriteplaneta1.src =  "./sprites/Fondo/planeta1.png";
+
+
+const Spriteplaneta2 = new Image();
+Spriteplaneta2.src = "./sprites/Fondo/planeta2.png";
+
+
+function PonerFondo() {
+  // Dibuja la imagen en la posición (0,0) con 700 de ancho y 400 de alto
+  ctx.drawImage(
+    Spriteplaneta1,  // Imagen fuente
+    0, 0,         // Coordenadas de inicio en la imagen fuente (sx, sy)
+    1080, 1200,     // Tamaño de la región en la imagen fuente (sWidth, sHeight)
+    0, 100,         // Coordenadas de destino en el canvas (dx, dy)
+    180 * (1.6), // Ancho al que queremos escalar en el canvas (dWidth)
+    200 * (1.6)// Alto al que queremos escalar en el canvas (dHeight)
+  );
+
+
+  ctx.drawImage(
+    Spriteplaneta2,  // Imagen fuente
+    0, 0,         // Coordenadas de inicio en la imagen fuente (
+    1120, 960,
+    950, 380,
+    70 * (3),
+    60 * (3)
+  )
 }
 
-*/
-function initStars() {
-  starsBack = [];
-  starsFront = [];
-  for (let i = 0; i < starCountBack; i++) {
-    starsBack.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 1 + 0.5,
-      speed: Math.random() * 0.3 + 0.1
-    });
+
+function updateEstrellas() {
+  estrellas = estrellas.filter(Estrella => Estrella.y < canvas.height);
+
+  const EstrellasEnPantalla = 400;
+
+  if (estrellas.length < EstrellasEnPantalla){
+    spawnEstrella();
   }
-  for (let i = 0; i < starCountFront; i++) {
-    starsFront.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 1.5 + 0.5,
-      speed: Math.random() * 0.7 + 0.3
-    });
-  }
+
+  estrellas.forEach(Estrella => Estrella.update());
+  estrellas.forEach(Estrella => Estrella.draw(ctx));
+
 }
 
-function updateStars() {
-  starsBack.forEach(star => {
-    star.y += star.speed;
-    if (star.y > canvas.height) { star.y = 0; star.x = Math.random() * canvas.width; }
-  });
-  starsFront.forEach(star => {
-    star.y += star.speed;
-    if (star.y > canvas.height) { star.y = 0; star.x = Math.random() * canvas.width; }
-  });
+function spawnEstrella() {
+  let x = Math.random() * canvas.width;
+  let y = 0;  // Las estrellas empiezan desde la parte superior
+
+  // Asignamos una velocidad aleatoria y un tamaño aleatorio
+  let speed = Math.random() * 0.5 + 0.1;  // Velocidad entre 0.1 y 0.6
+  let size = Math.random() * 10 ;       // Tamaño entre 1 y 3 píxeles
+  
+  let estrella = new Estrella(x, y, speed, size);
+  estrellas.push(estrella);
 }
 
-function drawStars() {
-  ctx.save();
-  ctx.fillStyle = "#333";
-  starsBack.forEach(star => {
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  ctx.fillStyle = "#fff";
-  starsFront.forEach(star => {
-    if (Math.random() < 0.95) { // Parpadeo aleatorio
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  });
-  ctx.restore();
-}
 
-initStars();
+
+
+
+

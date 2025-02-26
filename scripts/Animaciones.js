@@ -21,9 +21,44 @@ function drawAnimatedEnemy(enemy) {
 }
 
 
+const spriteBasicEnemy = new Image();
+spriteBasicEnemy.src = "./sprites/Enemigos/Enemigo_basicoM.png";
+
+const spriteBasicEnemyI = new Image();
+spriteBasicEnemyI.src = "./sprites/Enemigos/Enemigo_basicoI.png";
+
 function drawBasicEnemy(enemy) {
-  ctx.fillStyle = enemy.color || "#FF6600";
-  ctx.fillRect(-enemy.width / 2, -enemy.height / 2, enemy.width, enemy.height);
+  ctx.save();
+
+    
+  
+
+  enemy.frameTimer++;
+  if(enemy.frameTimer >= enemy.frameSpeed){
+    enemy.frameIndex = (enemy.frameIndex + 1) % enemy.frameCount;
+    enemy.frameTimer = 0;
+  }
+
+  let spriteX = enemy.frameIndex * enemy.frameWidth;
+  let spriteY = 0;
+
+  if (enemy.start) {
+    ctx.drawImage(
+      spriteBasicEnemyI,
+      spriteX, spriteY,
+      enemy.frameWidth, enemy.frameHeight,
+      -enemy.width / 2, -enemy.height / 2,
+      enemy.width, enemy.height)
+    }else{
+    ctx.drawImage(
+      spriteBasicEnemy,
+      spriteX, spriteY,
+      enemy.frameWidth, enemy.frameHeight,
+      -enemy.width / 2, -enemy.height / 2,
+      enemy.width, enemy.height
+    );
+  }
+  ctx.restore();
 }
 
 function drawShooterEnemy(enemy) {

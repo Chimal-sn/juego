@@ -15,8 +15,11 @@ function updateGame() {
   ctx.save();
   ctx.translate(shakeOffsetX, shakeOffsetY);
   ctx.clearRect(-shakeOffsetX, -shakeOffsetY, canvas.width, canvas.height);
-  drawStars();
-  updateStars();
+  
+  PonerFondo();
+
+  updateEstrellas();
+  
   updatePlayerMovement();
 
   if (boss) {
